@@ -29,11 +29,13 @@ app.get('/', async (req, res) => {
 // 获取功能列表
 app.get('/funList', async (req, res) => {
     const urls = `https://leap.ydhhb.top`;
+    // 此处填入功能列表
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
 		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
 		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: true}
     ]
+    // 筛选状态为开的功能返回
     let datas = [];
     arr.forEach(val=>{
         if(val.sta) datas.push(val);
