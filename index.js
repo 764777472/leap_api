@@ -9,6 +9,12 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/files', express.static('files'))
+
+
+const port = process.env.PORT || 3000
+const host = process.env.HOST || ''
+
 
 const BASE_URL = 'https://api.tryleap.ai/api/v1';
 const API_KEY = '5f1220cd-82e8-4d40-bbdf-5864cc3a64da';
@@ -18,6 +24,18 @@ const modelId = '1e7737d7-545e-469f-857f-e4b46eaa151d';
 app.get('/', async (req, res) => {
     res.status(200).send({
         message: 'Hello from LEAP-API',
+    })
+})
+// 获取功能列表
+app.get('/funList', async (req, res) => {
+    const urls = `http://${host ? host : 'localhost'}:${port}`;
+    const data = [
+        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
+		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
+		{id: 2, name: "AI作图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: true}
+    ];
+    res.status(200).send({
+        data
     })
 })
 /* 
@@ -227,8 +245,6 @@ app.post('/createLeap', async(req, res) => {
     }
 })
 
-const port = process.env.PORT || 3000
-const host = process.env.HOST || ''
 
 app.server = app.listen(port, host, () => {
   console.log(`server running @ http://${host ? host : 'localhost'}:${port}`)
