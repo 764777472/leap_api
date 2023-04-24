@@ -28,11 +28,11 @@ app.get('/', async (req, res) => {
 })
 // 获取功能列表
 app.get('/funList', async (req, res) => {
-    const urls = `http://${host ? host : 'localhost'}:${port}`;
+    const urls = `https://leap.ydhhb.top/`;
     const data = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
 		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
-		{id: 2, name: "AI作图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: true}
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: true}
     ];
     res.status(200).send({
         data
