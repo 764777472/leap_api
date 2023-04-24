@@ -17,7 +17,7 @@ const modelId = '1e7737d7-545e-469f-857f-e4b46eaa151d';
 // GET请求
 app.get('/', async (req, res) => {
     res.status(200).send({
-        message: 'Hello from CodeX',
+        message: 'Hello from LEAP-API',
     })
 })
 /* 
