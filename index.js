@@ -28,7 +28,7 @@ app.get('/', async (req, res) => {
 })
 // 获取功能列表
 app.get('/funList', async (req, res) => {
-    const urls = `https://leap.ydhhb.top/`;
+    const urls = `https://leap.ydhhb.top`;
     const data = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
 		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
