@@ -93,7 +93,7 @@ app.get('/createLeap', async (req, res) => {
             promptStrength,
             restoreFaces,
             enhancePrompt,
-            upscaleBy: upscaleBy ? upscaleBy : 'x2',
+            upscaleBy: upscaleBy ? 'x'+upscaleBy : 'x1',
             sampler: 'ddim'
         })
     };
