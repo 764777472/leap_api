@@ -44,7 +44,8 @@ app.get('/funList', async (req, res) => {
         if(val.sta) datas.push(val);
     })
     res.status(200).send({
-        data: datas
+        data: datas,
+        code: 200
     })
 })
 
