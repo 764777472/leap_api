@@ -111,6 +111,33 @@ app.get('/createLeap', async (req, res) => {
         });
     }
 })
+// 删除图像
+app.get('/deleteLeap', async (req, res) => {
+    const id = req.query.id || '';
+    const url = `${BASE_URL}/images/models/${modelId}/inferences/${id}`;
+    const options = {
+        method: 'DELETE',
+        headers: {
+            authorization: 'Bearer ' + API_KEY
+        }
+    };
+    if(!id) {
+        res.status(500).send({err: "inferenceId 不能为空"});
+    } else {
+        fetch(url, options)
+        .then(res => res.json())
+        .then(json => {
+            console.log(json)
+            res.status(200).send({
+                data: json,
+            })
+        })
+        .catch(err => {
+            console.error('error:' + err)
+            res.status(500).send({err})
+        });
+    }
+})
 // 获取单个图像
 app.get('/getLeap', async (req, res) => {
     const id = req.query.id || '';
