@@ -12,9 +12,6 @@ app.use(express.json());
 app.use('/files', express.static('files'))
 
 
-const port = process.env.PORT || 3000
-const host = process.env.HOST || ''
-
 
 const BASE_URL = 'https://api.tryleap.ai/api/v1';
 const API_KEY = '5f1220cd-82e8-4d40-bbdf-5864cc3a64da';
@@ -251,6 +248,8 @@ app.post('/createLeap', async(req, res) => {
     }
 })
 
+const port = process.env.PORT || 3000
+const host = process.env.HOST || ''
 
 app.server = app.listen(port, host, () => {
   console.log(`server running @ http://${host ? host : 'localhost'}:${port}`)
