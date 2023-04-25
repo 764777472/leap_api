@@ -54,7 +54,7 @@ app.get('/funList', async (req, res) => {
 app.get('/deleteLeap', async (req, res) => {
     const id = req.query.id || '';
     const url = `${BASE_URL}/images/models/${modelId}/inferences/${id}`;
-    
+
     axios({
         url,
         method: 'delete',
@@ -65,7 +65,8 @@ app.get('/deleteLeap', async (req, res) => {
         console.log(response)
         if(response.status == 200) {
             res.status(200).send({
-                data: 'ok'
+                data: 'ok',
+                code: 200
             })
         } else {
             res.status(500).send({
