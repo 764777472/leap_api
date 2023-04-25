@@ -3,6 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const fetch = require('node-fetch');
+const axios = require('axios')
 
 dotenv.config();
 
@@ -53,28 +54,27 @@ app.get('/funList', async (req, res) => {
 app.get('/deleteLeap', async (req, res) => {
     const id = req.query.id || '';
     const url = `${BASE_URL}/images/models/${modelId}/inferences/${id}`;
-    const options = {
-        method: 'DELETE',
+    
+    axios({
+        url,
+        method: 'delete',
         headers: {
             authorization: 'Bearer ' + API_KEY
         }
-    };
-    if(!id) {
-        res.status(500).send({err: "inferenceId 不能为空"});
-    } else {
-        fetch(url, options)
-        .then(res => res.json())
-        .then(json => {
-            console.log(json)
+    }).then(response => {
+        console.log(response)
+        if(response.status == 200) {
             res.status(200).send({
-                data: json,
+                data: 'ok'
             })
-        })
-        .catch(err => {
-            console.error('error:' + err)
-            res.status(500).send({err})
-        });
-    }
+        } else {
+            res.status(500).send({
+                err: "error"
+            })
+        }
+    }).catch(err=>{
+        res.status(500).send({err})
+    })
 })
 
 
