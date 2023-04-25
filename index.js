@@ -232,6 +232,7 @@ app.post('/createLeap', async(req, res) => {
             promptStrength,
             enhancePrompt,
         } = req.body;
+        const sampler = req.body.sampler || 'ddim';
         const url = `${BASE_URL}/images/models/${modelId}/inferences`;
         const options = {
             method: 'POST',
@@ -250,8 +251,8 @@ app.post('/createLeap', async(req, res) => {
                 promptStrength,
                 restoreFaces,
                 enhancePrompt,
-                upscaleBy: upscaleBy ? upscaleBy : 'x2',
-                sampler: 'ddim'
+                upscaleBy: upscaleBy ? 'x'+upscaleBy : 'x1',
+                sampler: sampler
             })
         };
         if(!prompt) {
