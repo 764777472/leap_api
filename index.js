@@ -85,22 +85,6 @@ app.get('/', async (req, res) => {
 })
 
 
-// GET请求
-app.get('/test', async (req, res) => {
-    const redis = new Redis("redis://red-ch52qolgk4q8pasesqcg:6379");
-
-    // Set and retrieve some values
-    redis.set("key", "ioredis")
-
-    redis.get("ioredis", function(err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(result)
-        }
-    })
-})
-
 
 
 // 获取功能列表
