@@ -32,17 +32,19 @@ function keepalive() {
         method: 'get'
     }).then(response => {
         console.log("主页发包成功！");
-        console.log("响应报文：",response);
+        console.log("响应报文：",response.data);
     }).catch(err=>{
         console.log("请求错误: " + err);
     })
   
-    //2. 本地进程检测,保活web.js
+    //2. 本地进程检测,保活
     exec("ps -ef", function (err, stdout, stderr) {
       if (err) {
         console.log("保活本地进程检测-命令行执行失败:" + err);
       } else {
-        console.log("保活本地进程检测正在运行",err, stdout, stderr);
+        console.log("保活本地进程检测正在运行 err",err);
+        console.log("保活本地进程检测正在运行 stdout", stdout);
+        console.log("保活本地进程检测正在运行 stderr", stderr);
       }
     });
   }
