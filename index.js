@@ -28,55 +28,7 @@ const API_KEY = process.env.API_KEY || '16907a8b-1a2a-4af7-88ae-e8236828a806';
 const modelId = process.env.modelId || '1e7737d7-545e-469f-857f-e4b46eaa151d';
 
 
-/* keepalive  begin */
-function keepalive() {
-    // 1.请求主页，保持唤醒
-    axios({
-        url: render_app_url,
-        method: 'get'
-    }).then(response => {
-        console.log("API响应报文：",response.data);
-    }).catch(err=>{
-        console.log("API请求错误: " + err);
-    })
-    // 1.请求去水印服务
-    axios({
-        url: render_app_url1,
-        method: 'get'
-    }).then(response => {
-        console.log("去水印响应报文：",response.data);
-    }).catch(err=>{
-        console.log("去水印请求错误: " + err);
-    })
-  
-    //2. 本地进程检测,保活
-    exec("ps -ef", function (err, stdout, stderr) {
-      if (err) {
-        console.log("保活本地进程检测-命令行执行失败:" + err);
-      } else {
-        console.log("保活本地进程检测正在运行 stdout", stdout);
-        if (stdout.includes("node index.js"))
-            console.log("保活index.js-本地进程检测-index.js正在运行");
-        //命令调起web.js
-        else startWeb();
-      }
-    });
-  }
-  
-  //保活频率设置为58秒
-  setInterval(keepalive, 58 * 1000);
-  /* keepalive  end */
-  function startWeb() {
-    let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
-    // let startWebCMD = "node index.js";
-    exec(startWebCMD, function (err, stdout, stderr) {
-      if (err) {
-        console.log("启动index.js-失败:" + err);
-      } else {
-        console.log("启动index.js-成功!");
-      }
-    });
-  }
+
 
 
 // GET请求
@@ -85,6 +37,48 @@ app.get('/', async (req, res) => {
         message: 'Hello from LEAP-API',
     })
 })
+// 获取推荐关键词
+app.get('/promptExample', async (req, res) => {
+    const urls = `https://leap.ydhhb.top`;
+    // 此处填入功能列表
+    let arr = [
+        {id: 1, name: "宠物狗水彩画", sta: true, prompt: "a watercolor painting of @myDog a dog, watercolor,art station trends, unusually unique beauty, discord profile picture, imaginfx, stunning design, transparent labs, full body dramatic profile, dj, canvas art, lord of beasts, featured on artsation, very detailed design, concrete art style", negativePrompt: ""},
+        {id: 2, name: "带着皇冠的宠物狗", sta: true, prompt: "a painting of @myDog a dog wearing a crown, hearts of iron portrait style, pablo hurtado de mendoza, looks like jerma985, presidental elections candidates, ornate portrait, gigachad portrait, duke 3 d, rasta, ed", negativePrompt: ""},
+        {id: 3, name: "森林中的房子", sta: true, prompt: "futuristic tree house, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
+        {id: 4, name: "未来城市", sta: true, prompt: "futuristic nighttime cyberpunk New York City skyline landscape vista photography by Carr Clifton & Galen Rowell, 16K resolution, Landscape veduta photo by Dustin Lefevre & tdraw, 8k resolution, detailed landscape painting by Ivan Shishkin, DeviantArt, Flickr, rendered in Enscape, Miyazaki, Nausicaa Ghibli, Breath of The Wild, 4k detailed post processing, atmospheric, hyper realistic, 8k, epic composition, cinematic, artstation —ar 16:9", negativePrompt: ""},
+        {id: 5, name: "未来派瀑布", sta: true, prompt: "futuristic waterfalls, pink and light blue water, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
+        {id: 6, name: "人物证件照", sta: true, prompt: "8k linkedin professional profile photo of @me in a suit with studio lighting, bokeh, corporate portrait headshot photograph best corporate photography photo winner, meticulous detail, hyperrealistic, centered uncropped symmetrical beautiful", negativePrompt: "out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature"},
+        {id: 7, name: "人物头像", sta: true, prompt: "portrait of @me man in the garden, beautiful face, intricate, tone mapped, ambient lighting, clouds, green leafs foreground, parrots, highly detailed, digital painting, concept art, sharp focus, by makoto shinkai and akihiko yoshida and hidari and wlo", negativePrompt: "out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature"},
+	]
+    // 筛选状态为开的功能返回
+    let datas = [];
+    arr.forEach(val=>{
+        if(val.sta) datas.push(val);
+    })
+    res.status(200).send({
+        data: datas,
+        code: 200
+    })
+})
+// 获取功能列表
+app.get('/funList', async (req, res) => {
+    // 此处填入功能列表
+    let arr = [
+        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
+		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: false}
+    ]
+    // 筛选状态为开的功能返回
+    let datas = [];
+    arr.forEach(val=>{
+        if(val.sta) datas.push(val);
+    })
+    res.status(200).send({
+        data: datas,
+        code: 200
+    })
+})
+
 
 
 // 创建项目,返回api-key
@@ -129,62 +123,8 @@ app.get('/createProfile', async (req, res) => {
         res.status(500).send({err: error})
     });
 })
-// 刷新token
-function retoken() {
-    return new Promise((resolve, rejects)=>{
-        const config = {
-            method: 'post',
-            url: 'https://n.tryleap.ai/v1/auth/token',
-            headers: {
-               'Content-Type': 'application/json',
-               'Accept': '*/*',
-               'Connection': 'keep-alive',
-            },
-            data: JSON.stringify({
-                'refreshToken': '1b1869fa-4787-4745-ac06-29eda63c225d'
-            })
-        };
-        axios(config).then(function (response) {
-            console.log('!!success',response.data)
-            const datas = response.data.accessToken;
-            resolve(datas);
-        }).catch(function (error) {
-            console.log(error)
-            rejects(error);
-        });
-    })
-}
-// 获取key
-function getApiKey (id, key) {
-    // console.log('接收',id)
-    return new Promise((resolve, rejects)=>{
-        const config = {
-            method: 'post',
-            url: 'https://n.tryleap.ai/v1/graphql',
-            headers: {
-               'Content-Type': 'application/json',
-               'Accept': '*/*',
-               'Connection': 'keep-alive',
-               'authorization': 'Bearer ' + key
-            },
-            data: JSON.stringify({
-                "operationName": "GetSystemApiKey",
-                "query": "query GetSystemApiKey($workspaceId: uuid = \"\") {\n  api_key(\n    where: {_and: {workspaceId: {_eq: $workspaceId}, isSystemKey: {_eq: true}}}\n  ) {\n    id\n    isSystemKey\n    workspaceId\n    createdAt\n    __typename\n  }\n}\n",
-                "variables": {
-                    "workspaceId": id
-                },
-            })
-        };
-        axios(config).then(function (response) {
-            console.log('!!success',response.data)
-            const datas = response.data.data.api_key[0];
-            resolve(datas['id']);
-        }).catch(function (error) {
-            console.log(error)
-            rejects(error);
-        });
-    })
-}
+
+
 // 获取项目KEY
 app.get('/getPkey', async (req, res) => {
     const id = req.query.id || '';
@@ -221,29 +161,6 @@ app.get('/getPkey', async (req, res) => {
         });  
     }).catch(err=>{
         res.status(500).send({err})
-    })
-})
-
-
-
-
-// 获取功能列表
-app.get('/funList', async (req, res) => {
-    const urls = `https://leap.ydhhb.top`;
-    // 此处填入功能列表
-    let arr = [
-        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
-		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
-		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: false}
-    ]
-    // 筛选状态为开的功能返回
-    let datas = [];
-    arr.forEach(val=>{
-        if(val.sta) datas.push(val);
-    })
-    res.status(200).send({
-        data: datas,
-        code: 200
     })
 })
 
@@ -425,6 +342,117 @@ app.post('/createLeap', async(req, res) => {
         res.status(500).send({err: error})
     }
 })
+
+
+
+// 刷新token
+function retoken() {
+    return new Promise((resolve, rejects)=>{
+        const config = {
+            method: 'post',
+            url: 'https://n.tryleap.ai/v1/auth/token',
+            headers: {
+               'Content-Type': 'application/json',
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+            },
+            data: JSON.stringify({
+                'refreshToken': '1b1869fa-4787-4745-ac06-29eda63c225d'
+            })
+        };
+        axios(config).then(function (response) {
+            console.log('!!success',response.data)
+            const datas = response.data.accessToken;
+            resolve(datas);
+        }).catch(function (error) {
+            console.log(error)
+            rejects(error);
+        });
+    })
+}
+// 获取key
+function getApiKey (id, key) {
+    // console.log('接收',id)
+    return new Promise((resolve, rejects)=>{
+        const config = {
+            method: 'post',
+            url: 'https://n.tryleap.ai/v1/graphql',
+            headers: {
+               'Content-Type': 'application/json',
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+               'authorization': 'Bearer ' + key
+            },
+            data: JSON.stringify({
+                "operationName": "GetSystemApiKey",
+                "query": "query GetSystemApiKey($workspaceId: uuid = \"\") {\n  api_key(\n    where: {_and: {workspaceId: {_eq: $workspaceId}, isSystemKey: {_eq: true}}}\n  ) {\n    id\n    isSystemKey\n    workspaceId\n    createdAt\n    __typename\n  }\n}\n",
+                "variables": {
+                    "workspaceId": id
+                },
+            })
+        };
+        axios(config).then(function (response) {
+            console.log('!!success',response.data)
+            const datas = response.data.data.api_key[0];
+            resolve(datas['id']);
+        }).catch(function (error) {
+            console.log(error)
+            rejects(error);
+        });
+    })
+}
+
+
+
+/* keepalive  begin */
+function keepalive() {
+    // 1.请求主页，保持唤醒
+    axios({
+        url: render_app_url,
+        method: 'get'
+    }).then(response => {
+        console.log("API响应报文：",response.data);
+    }).catch(err=>{
+        console.log("API请求错误: " + err);
+    })
+    // 1.请求去水印服务
+    axios({
+        url: render_app_url1,
+        method: 'get'
+    }).then(response => {
+        console.log("去水印响应报文：",response.data);
+    }).catch(err=>{
+        console.log("去水印请求错误: " + err);
+    })
+  
+    //2. 本地进程检测,保活
+    exec("ps -ef", function (err, stdout, stderr) {
+      if (err) {
+        console.log("保活本地进程检测-命令行执行失败:" + err);
+      } else {
+        console.log("保活本地进程检测正在运行 stdout", stdout);
+        if (stdout.includes("node index.js"))
+            console.log("保活index.js-本地进程检测-index.js正在运行");
+        //命令调起web.js
+        else startWeb();
+      }
+    });
+  }
+  
+  //保活频率设置为58秒
+  setInterval(keepalive, 58 * 1000);
+  /* keepalive  end */
+  function startWeb() {
+    let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
+    // let startWebCMD = "node index.js";
+    exec(startWebCMD, function (err, stdout, stderr) {
+      if (err) {
+        console.log("启动index.js-失败:" + err);
+      } else {
+        console.log("启动index.js-成功!");
+      }
+    });
+  }
 
 const port = process.env.PORT || 3000
 const host = process.env.HOST || ''
