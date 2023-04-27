@@ -5,6 +5,8 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 const axios = require('axios')
 
+const Redis = require('ioredis');
+
 dotenv.config();
 
 const app = express();
@@ -26,7 +28,6 @@ const modelId = process.env.modelId || '1e7737d7-545e-469f-857f-e4b46eaa151d';
 
 /* keepalive  begin */
 function keepalive() {
-    console.log('进入保活程序',render_app_url)
     // 1.请求主页，保持唤醒
     axios({
         url: render_app_url,
@@ -60,7 +61,7 @@ function keepalive() {
     });
   }
   
-  //保活频率设置为30秒
+  //保活频率设置为58秒
   setInterval(keepalive, 58 * 1000);
   /* keepalive  end */
   function startWeb() {
@@ -80,6 +81,23 @@ function keepalive() {
 app.get('/', async (req, res) => {
     res.status(200).send({
         message: 'Hello from LEAP-API',
+    })
+})
+
+
+// GET请求
+app.get('/test', async (req, res) => {
+    const redis = new Redis("redis://red-ch52qolgk4q8pasesqcg:6379");
+
+    // Set and retrieve some values
+    redis.set("key", "ioredis")
+
+    redis.get("ioredis", function(err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result)
+        }
     })
 })
 
