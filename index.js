@@ -12,11 +12,44 @@ app.use(cors());
 app.use(express.json());
 app.use('/files', express.static('files'))
 
+var exec = require("child_process").exec;
+const os = require("os");
+const render_app_url = "https://" + process.env.RENDER_EXTERNAL_HOSTNAME;
+
 
 
 const BASE_URL = process.env.BASE_URL || 'https://api.tryleap.ai/api/v1';
-const API_KEY = process.env.API_KEY || '5f1220cd-82e8-4d40-bbdf-5864cc3a64da';
+const API_KEY = process.env.API_KEY || '16907a8b-1a2a-4af7-88ae-e8236828a806';
 const modelId = process.env.modelId || '1e7737d7-545e-469f-857f-e4b46eaa151d';
+
+
+/* keepalive  begin */
+function keepalive() {
+    console.log('进入保活程序',render_app_url)
+    // 1.请求主页，保持唤醒
+    axios({
+        url: render_app_url,
+        method: 'get'
+    }).then(response => {
+        console.log("主页发包成功！");
+        console.log("响应报文：",response);
+    }).catch(err=>{
+        console.log("请求错误: " + err);
+    })
+  
+    //2. 本地进程检测,保活web.js
+    exec("ps -ef", function (err, stdout, stderr) {
+      if (err) {
+        console.log("保活本地进程检测-命令行执行失败:" + err);
+      } else {
+        console.log("保活本地进程检测正在运行",err, stdout, stderr);
+      }
+    });
+  }
+  
+  //保活频率设置为30秒
+  setInterval(keepalive, 30 * 1000);
+  /* keepalive  end */
 
 
 
