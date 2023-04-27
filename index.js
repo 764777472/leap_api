@@ -14,7 +14,7 @@ app.use('/files', express.static('files'))
 
 var exec = require("child_process").exec;
 const os = require("os");
-const render_app_url = "https://" + process.env.RENDER_EXTERNAL_HOSTNAME;
+const render_app_url = "https://leap.ydhhb.top";
 
 
 
