@@ -16,6 +16,8 @@ app.use('/files', express.static('files'))
 
 var exec = require("child_process").exec;
 const os = require("os");
+const { resolve } = require('path');
+const { rejects } = require('assert');
 const render_app_url = "https://leap.ydhhb.top";
 const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse";
 
@@ -81,6 +83,144 @@ function keepalive() {
 app.get('/', async (req, res) => {
     res.status(200).send({
         message: 'Hello from LEAP-API',
+    })
+})
+
+
+// 创建项目,返回api-key
+app.get('/createProfile', async (req, res) => {
+    const names = req.query.names || '';
+    const config = {
+        method: 'post',
+        url: 'https://www.tryleap.ai/api/create-project',
+        headers: {
+           'Content-Type': 'application/json',
+           'Accept': '*/*',
+           'Connection': 'keep-alive'
+        },
+        data: JSON.stringify({
+            "projectName": names,
+            "userId": "390f8097-0e8f-4db7-8124-721595e5c936"
+         })
+     };
+     
+    axios(config).then(function (response) {
+        // console.log(JSON.stringify(response.data));
+        const datas = response.data.data.data;
+        console.log('id',datas['update_workspace_by_pk'].id)
+        retoken().then(k=>{
+            getApiKey(datas['update_workspace_by_pk']['id'],k).then(thekey=>{
+                console.log('----key',thekey)
+                res.status(200).send({
+                    data: thekey,
+                    code: 200
+                })
+    
+            }).catch(function (error) {
+                console.log(error);
+                res.status(500).send({err: error})
+            });;
+        }).catch(function (error) {
+            console.log(error);
+            res.status(500).send({err: error})
+        });
+    }).catch(function (error) {
+        console.log(error);
+        res.status(500).send({err: error})
+    });
+})
+// 刷新token
+function retoken() {
+    return new Promise((resolve, rejects)=>{
+        const config = {
+            method: 'post',
+            url: 'https://n.tryleap.ai/v1/auth/token',
+            headers: {
+               'Content-Type': 'application/json',
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+            },
+            data: JSON.stringify({
+                'refreshToken': '1b1869fa-4787-4745-ac06-29eda63c225d'
+            })
+        };
+        axios(config).then(function (response) {
+            console.log('!!success',response.data)
+            const datas = response.data.accessToken;
+            resolve(datas);
+        }).catch(function (error) {
+            console.log(error)
+            rejects(error);
+        });
+    })
+}
+// 获取key
+function getApiKey (id, key) {
+    // console.log('接收',id)
+    return new Promise((resolve, rejects)=>{
+        const config = {
+            method: 'post',
+            url: 'https://n.tryleap.ai/v1/graphql',
+            headers: {
+               'Content-Type': 'application/json',
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+               'authorization': 'Bearer ' + key
+            },
+            data: JSON.stringify({
+                "operationName": "GetSystemApiKey",
+                "query": "query GetSystemApiKey($workspaceId: uuid = \"\") {\n  api_key(\n    where: {_and: {workspaceId: {_eq: $workspaceId}, isSystemKey: {_eq: true}}}\n  ) {\n    id\n    isSystemKey\n    workspaceId\n    createdAt\n    __typename\n  }\n}\n",
+                "variables": {
+                    "workspaceId": id
+                },
+            })
+        };
+        axios(config).then(function (response) {
+            console.log('!!success',response.data)
+            const datas = response.data.data.api_key[0];
+            resolve(datas['id']);
+        }).catch(function (error) {
+            console.log(error)
+            rejects(error);
+        });
+    })
+}
+// 获取项目KEY
+app.get('/getPkey', async (req, res) => {
+    const id = req.query.id || '';
+    retoken().then(k=>{
+        const config = {
+            method: 'post',
+            url: 'https://n.tryleap.ai/v1/graphql',
+            headers: {
+               'Content-Type': 'application/json',
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+               'authorization': 'Bearer ' + k
+            },
+            data: JSON.stringify({
+                "operationName": "GetSystemApiKey",
+                "query": "query GetSystemApiKey($workspaceId: uuid = \"\") {\n  api_key(\n    where: {_and: {workspaceId: {_eq: $workspaceId}, isSystemKey: {_eq: true}}}\n  ) {\n    id\n    isSystemKey\n    workspaceId\n    createdAt\n    __typename\n  }\n}\n",
+                "variables": {
+                    "workspaceId": id
+                },
+            })
+         };
+         
+        axios(config).then(function (response) {
+            console.log(JSON.stringify(response.data));
+            const datas = response.data;
+            // const datas = response.data.data.api_key[0];
+            res.status(200).send({
+                data: datas,
+                code: 200
+            })
+        }).catch(function (error) {
+            console.log(error);
+            res.status(500).send({err: error})
+        });  
+    }).catch(err=>{
+        res.status(500).send({err})
     })
 })
 
