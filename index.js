@@ -39,7 +39,6 @@ app.get('/', async (req, res) => {
 })
 // 获取推荐关键词
 app.get('/promptExample', async (req, res) => {
-    const urls = `https://leap.ydhhb.top`;
     // 此处填入功能列表
     let arr = [
         {id: 1, name: "宠物狗水彩画", sta: true, prompt: "a watercolor painting of @myDog a dog, watercolor,art station trends, unusually unique beauty, discord profile picture, imaginfx, stunning design, transparent labs, full body dramatic profile, dj, canvas art, lord of beasts, featured on artsation, very detailed design, concrete art style", negativePrompt: ""},
@@ -60,14 +59,16 @@ app.get('/promptExample', async (req, res) => {
         code: 200
     })
 })
+
 // 获取功能列表
 app.get('/funList', async (req, res) => {
+    const urls = `https://leap.ydhhb.top`;
     // 此处填入功能列表
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
 		{id: 2, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
 		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: false}
-    ]
+    ];
     // 筛选状态为开的功能返回
     let datas = [];
     arr.forEach(val=>{
