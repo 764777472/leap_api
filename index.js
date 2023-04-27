@@ -41,7 +41,7 @@ function keepalive() {
         url: render_app_url1,
         method: 'get'
     }).then(response => {
-        console.log("去水印响应报文：",response.body);
+        console.log("去水印响应报文：",response.data);
     }).catch(err=>{
         console.log("去水印请求错误: " + err);
     })
