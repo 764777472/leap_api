@@ -15,7 +15,7 @@ app.use('/files', express.static('files'))
 var exec = require("child_process").exec;
 const os = require("os");
 const render_app_url = "https://leap.ydhhb.top";
-const render_app_url1 = "https://mark.ydhhb.top";
+const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse";
 
 
 
@@ -61,7 +61,7 @@ function keepalive() {
   }
   
   //保活频率设置为30秒
-  setInterval(keepalive, 30 * 1000);
+  setInterval(keepalive, 58 * 1000);
   /* keepalive  end */
   function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
