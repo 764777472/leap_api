@@ -15,6 +15,7 @@ app.use('/files', express.static('files'))
 var exec = require("child_process").exec;
 const os = require("os");
 const render_app_url = "https://leap.ydhhb.top";
+const render_app_url1 = "https://mark.ydhhb.top";
 
 
 
@@ -31,10 +32,18 @@ function keepalive() {
         url: render_app_url,
         method: 'get'
     }).then(response => {
-        console.log("主页发包成功！");
-        console.log("响应报文：",response.data);
+        console.log("API响应报文：",response.data);
     }).catch(err=>{
-        console.log("请求错误: " + err);
+        console.log("API请求错误: " + err);
+    })
+    // 1.请求去水印服务
+    axios({
+        url: render_app_url1,
+        method: 'get'
+    }).then(response => {
+        console.log("去水印响应报文：",response.body);
+    }).catch(err=>{
+        console.log("去水印请求错误: " + err);
     })
   
     //2. 本地进程检测,保活
@@ -42,9 +51,11 @@ function keepalive() {
       if (err) {
         console.log("保活本地进程检测-命令行执行失败:" + err);
       } else {
-        console.log("保活本地进程检测正在运行 err",err);
         console.log("保活本地进程检测正在运行 stdout", stdout);
-        console.log("保活本地进程检测正在运行 stderr", stderr);
+        if (stdout.includes("node index.js"))
+            console.log("保活index.js-本地进程检测-index.js正在运行");
+        //命令调起web.js
+        else startWeb();
       }
     });
   }
@@ -52,7 +63,17 @@ function keepalive() {
   //保活频率设置为30秒
   setInterval(keepalive, 30 * 1000);
   /* keepalive  end */
-
+  function startWeb() {
+    let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
+    // let startWebCMD = "node index.js";
+    exec(startWebCMD, function (err, stdout, stderr) {
+      if (err) {
+        console.log("启动index.js-失败:" + err);
+      } else {
+        console.log("启动index.js-成功!");
+      }
+    });
+  }
 
 
 // GET请求
