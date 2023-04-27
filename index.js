@@ -1,23 +1,23 @@
-const express = require('express');
+import express from 'express';
 // import * as dotenv from 'dotenv';
-const dotenv = require('dotenv');
-const cors = require('cors');
-const fetch = require('node-fetch');
-const axios = require('axios')
+import { config as _config } from 'dotenv';
+import cors from 'cors';
+import fetch from 'node-fetch';
+import axios from 'axios';
 
-const Redis = require('ioredis');
+import Redis from 'ioredis';
 
-dotenv.config();
+_config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/files', express.static('files'))
 
-var exec = require("child_process").exec;
-const os = require("os");
-const { resolve } = require('path');
-const { rejects } = require('assert');
+import { exec } from "child_process";
+import os from "os";
+import { resolve } from 'path';
+import { rejects } from 'assert';
 const render_app_url = "https://leap.ydhhb.top";
 const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse";
 
@@ -29,8 +29,7 @@ const modelId = process.env.modelId || '1e7737d7-545e-469f-857f-e4b46eaa151d';
 
 
 
-
-
+// app.get('/api/users', getUsers)
 // GET请求
 app.get('/', async (req, res) => {
     res.status(200).send({
@@ -441,7 +440,9 @@ function keepalive() {
   }
   
   //保活频率设置为58秒
-  setInterval(keepalive, 58 * 1000);
+//   setInterval(keepalive, 58 * 1000);
+
+
   /* keepalive  end */
   function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
@@ -461,4 +462,4 @@ const host = process.env.HOST || ''
 app.server = app.listen(port, host, () => {
   console.log(`server running @ http://${host ? host : 'localhost'}:${port}`)
 })
-module.exports = app;
+export default app;
