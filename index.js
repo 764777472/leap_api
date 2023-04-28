@@ -61,12 +61,13 @@ app.get('/promptExample', async (req, res) => {
 
 // 获取功能列表
 app.get('/funList', async (req, res) => {
-    const urls = `https://leap.ydhhb.top`;
+    const urls = `https://leap.ydhhb.top/files/`;
     // 此处填入功能列表
     let arr = [
-        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
-		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: false},
-		{id: 3, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
+        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', url: urls, sta: 1},
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', url: urls, sta: 0},
+		{id: 3, name: "Bot*?", url: "/pages/splash/splash",icon: 'logo1.png', url: urls, sta: 0},
+		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', url: urls, sta: 0},
     ];
     // 筛选状态为开的功能返回
     let datas = [];
@@ -74,6 +75,7 @@ app.get('/funList', async (req, res) => {
         if(val.sta) datas.push(val);
     })
     res.status(200).send({
+        cloud: false,
         data: datas,
         code: 200
     })
@@ -298,6 +300,7 @@ app.post('/createLeap', async(req, res) => {
             restoreFaces,
             promptStrength,
             enhancePrompt,
+            apiKey,
         } = req.body;
         const sampler = req.body.sampler || 'ddim';
         const url = `${BASE_URL}/images/models/${modelId}/inferences`;
@@ -306,7 +309,7 @@ app.post('/createLeap', async(req, res) => {
             headers: {
                 'accept': 'application/json',
                 'content-type': 'application/json',
-                'authorization': 'Bearer ' + API_KEY
+                'authorization': 'Bearer ' + apiKey ? apiKey : API_KEY
             },
             body: JSON.stringify({
                 prompt,
