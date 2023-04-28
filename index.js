@@ -65,8 +65,8 @@ app.get('/funList', async (req, res) => {
     // 此处填入功能列表
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: urls+'/files/watermark.svg', sta: true},
-		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: true},
-		{id: 3, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: true},
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: urls+'/files/logo1.png', sta: false},
+		{id: 3, name: "Bot*?", url: "/pages/splash/splash",icon: urls+'/files/logo1.png', sta: false},
     ];
     // 筛选状态为开的功能返回
     let datas = [];
