@@ -300,8 +300,8 @@ app.post('/createLeap', async(req, res) => {
             restoreFaces,
             promptStrength,
             enhancePrompt,
-            apiKey,
         } = req.body;
+        const tkey = req.body.apiKey || API_KEY;
         const sampler = req.body.sampler || 'ddim';
         const url = `${BASE_URL}/images/models/${modelId}/inferences`;
         const options = {
@@ -309,7 +309,7 @@ app.post('/createLeap', async(req, res) => {
             headers: {
                 'accept': 'application/json',
                 'content-type': 'application/json',
-                'authorization': 'Bearer ' + apiKey ? apiKey : API_KEY
+                'authorization': 'Bearer ' + tkey
             },
             body: JSON.stringify({
                 prompt,
