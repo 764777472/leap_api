@@ -26,15 +26,6 @@ const BASE_URL = process.env.BASE_URL || 'https://api.tryleap.ai/api/v1';
 const API_KEY = process.env.API_KEY || '16907a8b-1a2a-4af7-88ae-e8236828a806';
 const modelId = process.env.modelId || '1e7737d7-545e-469f-857f-e4b46eaa151d';
 
-import { get, getAll  } from '@vercel/edge-config';
-
-app.get('/api/edges', async (req, res)=> {
-    const configItems = await getAll();
-    res.status(200).send({
-        data: configItems
-    })
-})
-
 
 // GET请求
 app.get('/', async (req, res) => {
