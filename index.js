@@ -37,6 +37,7 @@ app.get('/', async (req, res) => {
 app.get('/promptExample', async (req, res) => {
     // 此处填入功能列表
     let arr = [
+        {id: 8, name: "卡通风格的猫咪", sta: true, prompt: "cat under a rock, dark, moody, concept art by alphonse mucha and greg rutkowski", negativePrompt: "asymmetric, watermarks"},
         {id: 3, name: "森林中的房子", sta: true, prompt: "futuristic tree house, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
         {id: 5, name: "未来派瀑布", sta: true, prompt: "futuristic waterfalls, pink and light blue water, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
         {id: 1, name: "宠物狗水彩画", sta: true, prompt: "a watercolor painting of @myDog a dog, watercolor,art station trends, unusually unique beauty, discord profile picture, imaginfx, stunning design, transparent labs, full body dramatic profile, dj, canvas art, lord of beasts, featured on artsation, very detailed design, concrete art style", negativePrompt: ""},
