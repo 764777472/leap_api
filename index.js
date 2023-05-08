@@ -63,7 +63,7 @@ app.get('/funList', async (req, res) => {
     // 此处填入功能列表
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', srcs: urls, sta: 1},
-		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', srcs: urls, sta: 0},
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', srcs: urls, sta: 1},
 		{id: 3, name: "Bot*?", url: "/pages/splash/splash",icon: 'logo1.png', srcs: urls, sta: 0},
 		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', srcs: urls, sta: 1},
     ];
@@ -125,6 +125,56 @@ app.get('/createProfile', async (req, res) => {
 })
 
 
+// 获取所有项目列表
+app.get('/getProjects', async (req, res) => {
+    const id = req.query.id || '';
+    retoken().then(k=>{
+        const config = {
+            method: 'post',
+            url: 'https://n.tryleap.ai/v1/graphql',
+            headers: {
+               'Content-Type': 'application/json',
+               'Accept': '*/*',
+               'Connection': 'keep-alive',
+               'authorization': 'Bearer ' + k
+            },
+            data: JSON.stringify({
+                "operationName": "GetAllProjects",
+                "query": `query GetAllProjects {
+                    workspace(where: {isArchived: {_eq: false}}) {
+                      id
+                      name
+                      isArchived
+                      createdAt
+                      isPaid,
+                      stripeCustomerId
+                      stripeSubscriptionId
+                      stripeSubscriptionItemIdImagesGenerated
+                      stripeSubscriptionItemIdModelsTrained
+                      __typename
+                    }
+                }`,
+                "variables": {},
+            })
+         };
+         
+        axios(config).then(function (response) {
+            console.log(JSON.stringify(response.data));
+            const datas = response.data.data.workspace;
+            res.status(200).send({
+                data: datas,
+                code: 200
+            })
+        }).catch(function (error) {
+            console.log(error);
+            res.status(500).send({err: error})
+        });  
+    }).catch(err=>{
+        res.status(500).send({err})
+    })
+})
+
+
 // 获取项目KEY
 app.get('/getPkey', async (req, res) => {
     const id = req.query.id || '';
@@ -140,7 +190,17 @@ app.get('/getPkey', async (req, res) => {
             },
             data: JSON.stringify({
                 "operationName": "GetSystemApiKey",
-                "query": "query GetSystemApiKey($workspaceId: uuid = \"\") {\n  api_key(\n    where: {_and: {workspaceId: {_eq: $workspaceId}, isSystemKey: {_eq: true}}}\n  ) {\n    id\n    isSystemKey\n    workspaceId\n    createdAt\n    __typename\n  }\n}\n",
+                "query": `query GetSystemApiKey($workspaceId: uuid = "") {
+                    api_key(
+                      where: {_and: {workspaceId: {_eq: $workspaceId}, isSystemKey: {_eq: true}}}
+                    ) {
+                      id
+                      isSystemKey
+                      workspaceId
+                      createdAt
+                      __typename
+                    }
+                }`,
                 "variables": {
                     "workspaceId": id
                 },
@@ -362,7 +422,7 @@ function retoken() {
             })
         };
         axios(config).then(function (response) {
-            console.log('!!success',response.data)
+            // console.log('!!success',response.data)
             const datas = response.data.accessToken;
             resolve(datas);
         }).catch(function (error) {
