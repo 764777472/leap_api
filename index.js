@@ -17,15 +17,20 @@ import { exec } from "child_process";
 import os from "os";
 import { resolve } from 'path';
 import { rejects } from 'assert';
-const render_app_url = "https://leap.ydhhb.top";
-const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse";
 
 
+// render 保活 start
+const render_app_url = "https://leap.ydhhb.top";                        //api 配置
+const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse"; //parse-video 
+// render 保活 end
 
-const BASE_URL = process.env.BASE_URL || 'https://api.tryleap.ai/api/v1';
-const API_KEY = process.env.API_KEY || '16907a8b-1a2a-4af7-88ae-e8236828a806';
-const modelId = process.env.modelId || '1e7737d7-545e-469f-857f-e4b46eaa151d';
+// leap-api 配置 start
+const BASE_URL = process.env.BASE_URL   || 'https://api.tryleap.ai/api/v1';          //Api Link
+const modelId = process.env.modelId     || '1e7737d7-545e-469f-857f-e4b46eaa151d';   //Modal Id
 
+const API_KEY = process.env.API_KEY;   //Api Key
+const userId = process.env.userId;   //User Id
+// leap-api 配置 end
 
 // GET请求
 app.get('/', async (req, res) => {
@@ -94,7 +99,7 @@ app.get('/createProfile', async (req, res) => {
         },
         data: JSON.stringify({
             "projectName": names,
-            "userId": "390f8097-0e8f-4db7-8124-721595e5c936"
+            userId
          })
      };
      
@@ -289,7 +294,7 @@ app.get('/getLeap', async (req, res) => {
 
 // 获取全部图像
 app.get('/getAllLeap', async (req, res) => {
-    const { page, pageSize } = req.query;
+    const { page=1, pageSize=100 } = req.query;
     const url = `${BASE_URL}/images/models/${modelId}/inferences?page=${page}&pageSize=${pageSize}`;
     const options = {
         method: 'GET',
@@ -298,18 +303,17 @@ app.get('/getAllLeap', async (req, res) => {
           authorization: 'Bearer ' + API_KEY
         }
     };
-    fetch(url, options)
-        .then(res => res.json())
-        .then(json => {
-            console.log(json)
-            res.status(200).send({
-                data: json,
-            })
+    fetch(url, options).then(
+        res => res.json()
+    ).then(json => {
+        console.log(json)
+        res.status(200).send({
+            data: json,
         })
-        .catch(err => {
-            console.error('error:' + err)
-            res.status(500).send({err})
-        });
+    }).catch(err => {
+        console.error('error:' + err)
+        res.status(500).send({err})
+    });
 })
 
 
@@ -471,19 +475,11 @@ function keepalive() {
     axios({
         url: render_app_url,
         method: 'get'
-    }).then(response => {
-        console.log("API响应报文：",response.data);
-    }).catch(err=>{
-        console.log("API请求错误: " + err);
     })
     // 1.请求去水印服务
     axios({
         url: render_app_url1,
         method: 'get'
-    }).then(response => {
-        console.log("去水印响应报文：",response.data);
-    }).catch(err=>{
-        console.log("去水印请求错误: " + err);
     })
   
     //2. 本地进程检测,保活
@@ -498,14 +494,12 @@ function keepalive() {
         else startWeb();
       }
     });
-  }
+}
   
   //保活频率设置为58秒
   setInterval(keepalive, 58 * 1000);
-
-
-  /* keepalive  end */
-  function startWeb() {
+/* keepalive  end */
+function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
     // let startWebCMD = "node index.js";
     exec(startWebCMD, function (err, stdout, stderr) {
@@ -515,12 +509,12 @@ function keepalive() {
         console.log("启动index.js-成功!");
       }
     });
-  }
+}
 
 const port = process.env.PORT || 3000
 const host = process.env.HOST || ''
 
 app.server = app.listen(port, host, () => {
-  console.log(`server running @ http://${host ? host : 'localhost'}:${port}`)
+  console.log(`server running at http://${host ? host : 'localhost'}:${port}`)
 })
 export default app;
