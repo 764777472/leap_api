@@ -30,6 +30,7 @@ const modelId = process.env.modelId     || '1e7737d7-545e-469f-857f-e4b46eaa151d
 
 const API_KEY = process.env.API_KEY;   //Api Key
 const userId = process.env.userId;   //User Id
+const refreshToken = process.env.refreshToken;   //刷新token
 // leap-api 配置 end
 
 // GET请求
@@ -422,7 +423,7 @@ function retoken() {
                'Connection': 'keep-alive',
             },
             data: JSON.stringify({
-                'refreshToken': '1b1869fa-4787-4745-ac06-29eda63c225d'
+                refreshToken
             })
         };
         axios(config).then(function (response) {
