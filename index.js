@@ -26,7 +26,7 @@ const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse"; //parse-
 
 // leap-api 配置 start
 const BASE_URL = process.env.BASE_URL   || 'https://api.tryleap.ai/api/v1';          //Api Link
-const modelId = process.env.modelId     || '1e7737d7-545e-469f-857f-e4b46eaa151d';   //Modal Id
+const MODEL_ID = process.env.MODEL_ID;   //Modal Id
 
 const API_KEY = process.env.API_KEY;   //Api Key
 const userId = process.env.userId;   //User Id
@@ -236,7 +236,7 @@ app.get('/getPkey', async (req, res) => {
 // 删除图像
 app.get('/deleteLeap', async (req, res) => {
     const id = req.query.id || '';
-    const url = `${BASE_URL}/images/models/${modelId}/inferences/${id}`;
+    const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences/${id}`;
 
     axios({
         url,
@@ -266,7 +266,7 @@ app.get('/deleteLeap', async (req, res) => {
 // 获取单个图像
 app.get('/getLeap', async (req, res) => {
     const id = req.query.id || '';
-    const url = `${BASE_URL}/images/models/${modelId}/inferences/${id}`;
+    const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences/${id}`;
     const options = {
         method: 'GET',
         headers: {
@@ -297,7 +297,7 @@ app.get('/getLeap', async (req, res) => {
 // 获取全部图像
 app.get('/getAllLeap', async (req, res) => {
     const { page=1, pageSize=100 } = req.query;
-    const url = `${BASE_URL}/images/models/${modelId}/inferences?page=${page}&pageSize=${pageSize}`;
+    const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences?page=${page}&pageSize=${pageSize}`;
     const options = {
         method: 'GET',
         headers: {
@@ -367,7 +367,7 @@ app.post('/createLeap', async(req, res) => {
         } = req.body;
         const tkey = req.body.apiKey || API_KEY;
         const sampler = req.body.sampler || 'euler_a';
-        const url = `${BASE_URL}/images/models/${modelId}/inferences`;
+        const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences`;
         const options = {
             method: 'POST',
             headers: {
