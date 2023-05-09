@@ -365,7 +365,7 @@ app.post('/createLeap', async(req, res) => {
             enhancePrompt,
         } = req.body;
         const tkey = req.body.apiKey || API_KEY;
-        const sampler = req.body.sampler || 'ddim';
+        const sampler = req.body.sampler || 'euler_a';
         const url = `${BASE_URL}/images/models/${modelId}/inferences`;
         const options = {
             method: 'POST',
