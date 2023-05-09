@@ -180,6 +180,7 @@ app.get('/getProjects', async (req, res) => {
     })
 })
 
+// https://www.tryleap.ai/api/usage?workspaceId=db0d62bf-29fe-48fc-bd51-46ac2f0fffcd 查看项目剩余额度
 
 // 获取项目KEY
 app.get('/getPkey', async (req, res) => {
