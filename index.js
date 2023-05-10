@@ -39,6 +39,47 @@ app.get('/', async (req, res) => {
         message: 'Leap api for render.',
     })
 })
+
+// 获取采样器列表和模型列表
+app.get('/getSampler', async (req, res) => {
+    let samplerList = [
+        {id: 4, name: "euler", desc: "柔和，也适合插画，环境细节与渲染好，背景模糊较深。"},
+        {id: 1, name: "ddim", desc: "适合宽画，速度偏低，高step表现好，负面tag不够时发挥随意，环境光线与水汽效果好，写实不佳。"},
+        {id: 2, name: "dpm_2a", desc: "对关键词的利用率最高，几乎占80％以上。"},
+        {id: 3, name: "dpm_plusplus_sde", desc: "比dpm_2a强悍。"},
+        {id: 5, name: "euler_a", desc: "适合插画，关键词利用率仅次于dpm_2a，环境光效表现逊色，构图有时很奇葩。"},
+    ]
+    let modalList = [
+        {id: 1, name: "Stable Diffusion 1.5", modal: "8b1b897c-d66d-45a6-b8d7-8e32421d02cf", desc: 'id1'},
+        {id: 2, name: "Stable Diffusion 2.1", modal: "ee88d150-4259-4b77-9d0f-090abe29f650", desc: 'id1'},
+        {id: 3, name: "OpenJourney v4",       modal: "1e7737d7-545e-469f-857f-e4b46eaa151d", desc: 'id3'},
+        {id: 4, name: "OpenJourney v2",       modal: "d66b1686-5e5d-43b2-a2e7-d295d679917c", desc: 'id3'},
+        {id: 5, name: "OpenJourney v1",       modal: "7575ea52-3d4f-400f-9ded-09f7b1b1a5b8", desc: 'id3'},
+        {id: 6, name: "Modern Disney",        modal: "8ead1e66-5722-4ff6-a13f-b5212f575321", desc: 'id6'},
+        {id: 7, name: "Future Diffusion",     modal: "1285ded4-b11b-4993-a491-d87cdfe6310c", desc: 'id7'},
+        {id: 8, name: "Realistic Vision v2.0",modal: "eab32df0-de26-4b83-a908-a83f3015e971", desc: 'id8'},
+    ]
+    res.status(200).send({
+        data: {
+            sampler: samplerList,
+            modal: modalList
+        },
+        code: 200
+    })
+})
+
+import { getContent } from "./content.js";
+// 获取模型说明
+app.get('/getModalDesc', async (req, res) => {
+    const descid = req.query.descid;
+    const data = getContent(descid);
+    res.status(200).send({
+        data,
+        code: 200
+    })
+})
+
+
 // 获取推荐关键词
 app.get('/promptExample', async (req, res) => {
     // 此处填入功能列表
@@ -70,7 +111,6 @@ app.get('/funList', async (req, res) => {
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', srcs: urls, sta: 1},
 		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', srcs: urls, sta: 1},
-		{id: 3, name: "Bot*?", url: "/pages/splash/splash",icon: 'logo1.png', srcs: urls, sta: 0},
 		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', srcs: urls, sta: 1},
     ];
     // 筛选状态为开的功能返回
@@ -367,7 +407,29 @@ app.post('/createLeap', async(req, res) => {
         } = req.body;
         const tkey = req.body.apiKey || API_KEY;
         const sampler = req.body.sampler || 'euler_a';
-        const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences`;
+        const seed = req.body.seed || '';
+        
+        let modalId = req.body.modalId ? req.body.modalId : MODEL_ID;
+
+        const url = `${BASE_URL}/images/models/${modalId}/inferences`;
+
+        let data = {
+            prompt,
+            negativePrompt: negativePrompt ? negativePrompt : 'asymmetric, watermarks',
+            steps,
+            width,
+            height,
+            numberOfImages,
+            promptStrength,
+            restoreFaces,
+            enhancePrompt,
+            upscaleBy: upscaleBy ? 'x'+upscaleBy : 'x1',
+            sampler: sampler
+        };
+        if(seed) {
+            data.seed = seed
+        };
+
         const options = {
             method: 'POST',
             headers: {
@@ -375,19 +437,7 @@ app.post('/createLeap', async(req, res) => {
                 'content-type': 'application/json',
                 'authorization': 'Bearer ' + tkey
             },
-            body: JSON.stringify({
-                prompt,
-                negativePrompt: negativePrompt ? negativePrompt : 'asymmetric, watermarks',
-                steps,
-                width,
-                height,
-                numberOfImages,
-                promptStrength,
-                restoreFaces,
-                enhancePrompt,
-                upscaleBy: upscaleBy ? 'x'+upscaleBy : 'x1',
-                sampler: sampler
-            })
+            body: JSON.stringify(data)
         };
         if(!prompt) {
             res.status(500).send({err: "prompt 不能为空"});
@@ -499,7 +549,7 @@ function keepalive() {
 }
   
   //保活频率设置为58秒
-  setInterval(keepalive, 58 * 1000);
+//   setInterval(keepalive, 58 * 1000);
 /* keepalive  end */
 function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
@@ -517,6 +567,6 @@ const port = process.env.PORT || 3000
 const host = process.env.HOST || ''
 
 app.server = app.listen(port, host, () => {
-  console.log(`server running at http://${host ? host : 'localhost'}:${port}`)
+  console.log(`server running on http://${host ? host : 'localhost'}:${port}`)
 })
 export default app;
