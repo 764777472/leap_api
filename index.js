@@ -448,7 +448,7 @@ app.post('/createLeap', async(req, res) => {
             fetch(url, options)
             .then(res => res.json())
             .then(json => {
-                // console.log(json)
+                console.log('创建图像',json)
                 res.status(200).send({
                     data: json,
                 })
