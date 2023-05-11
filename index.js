@@ -43,7 +43,7 @@ app.get('/', async (req, res) => {
 // 获取采样器列表和模型列表
 app.get('/getSampler', async (req, res) => {
     let samplerList = [
-        {id: 4, name: "euler", desc: "柔和，也适合插画，环境细节与渲染好，背景模糊较深。"},
+        {id: 4, name: "euler", desc: "柔和 适合插画，环境细节与渲染好，背景模糊较深。"},
         {id: 1, name: "ddim", desc: "适合宽画，速度偏低，高step表现好，负面tag不够时发挥随意，环境光线与水汽效果好，写实不佳。"},
         {id: 2, name: "dpm_2a", desc: "对关键词的利用率最高，几乎占80％以上。"},
         {id: 3, name: "dpm_plusplus_sde", desc: "比dpm_2a强悍。"},
@@ -84,7 +84,8 @@ app.get('/getModalDesc', async (req, res) => {
 app.get('/promptExample', async (req, res) => {
     // 此处填入功能列表
     let arr = [
-        {id: 8, name: "卡通风格的猫咪", sta: true, prompt: "cat under a rock, dark, moody, concept art by alphonse mucha and greg rutkowski", negativePrompt: "asymmetric, watermarks"},
+        {id: 9, name: "写实派画像", sta: true, prompt: "RAW photo, a close up portrait photo of 26 y.o woman in wastelander clothes, long haircut, pale skin, slim body, background is city ruins, (high detailed skin:1.2), 8k uhd, dslr, soft lighting, high quality, film grain, Fujifilm XT3", negativePrompt: "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, fringe",promptStrength: 6.07,sampler: "euler", steps: 25, modalId: "eab32df0-de26-4b83-a908-a83f3015e971",width: 512,height: 512},
+        {id: 8, name: "卡通风格的猫咪", sta: true, prompt: "cat under a rock, dark, moody, concept art by alphonse mucha and greg rutkowski", negativePrompt: "asymmetric, watermarks",modalId: "ee88d150-4259-4b77-9d0f-090abe29f650",sampler: "ddim"},
         {id: 3, name: "森林中的房子", sta: true, prompt: "futuristic tree house, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
         {id: 5, name: "未来派瀑布", sta: true, prompt: "futuristic waterfalls, pink and light blue water, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
         {id: 1, name: "宠物狗水彩画", sta: true, prompt: "a watercolor painting of @myDog a dog, watercolor,art station trends, unusually unique beauty, discord profile picture, imaginfx, stunning design, transparent labs, full body dramatic profile, dj, canvas art, lord of beasts, featured on artsation, very detailed design, concrete art style", negativePrompt: ""},
@@ -147,10 +148,10 @@ app.get('/createProfile', async (req, res) => {
     axios(config).then(function (response) {
         // console.log(JSON.stringify(response.data));
         const datas = response.data.data.data;
-        console.log('id',datas['update_workspace_by_pk'].id)
+        // console.log('id',datas['update_workspace_by_pk'].id)
         retoken().then(k=>{
             getApiKey(datas['update_workspace_by_pk']['id'],k).then(thekey=>{
-                console.log('----key',thekey)
+                // console.log('----key',thekey)
                 res.status(200).send({
                     data: thekey,
                     code: 200
@@ -205,7 +206,7 @@ app.get('/getProjects', async (req, res) => {
          };
          
         axios(config).then(function (response) {
-            console.log(JSON.stringify(response.data));
+            // console.log(JSON.stringify(response.data));
             const datas = response.data.data.workspace;
             res.status(200).send({
                 data: datas,
@@ -255,7 +256,7 @@ app.get('/getPkey', async (req, res) => {
          };
          
         axios(config).then(function (response) {
-            console.log(JSON.stringify(response.data));
+            // console.log(JSON.stringify(response.data));
             const datas = response.data;
             // const datas = response.data.data.api_key[0];
             res.status(200).send({
@@ -285,7 +286,7 @@ app.get('/deleteLeap', async (req, res) => {
             authorization: 'Bearer ' + API_KEY
         }
     }).then(response => {
-        console.log(response)
+        // console.log(response)
         if(response.status == 200) {
             res.status(200).send({
                 data: 'ok',
@@ -320,7 +321,7 @@ app.get('/getLeap', async (req, res) => {
         fetch(url, options)
         .then(res => res.json())
         .then(json => {
-            console.log(json)
+            // console.log(json)
             res.status(200).send({
                 data: json,
             })
@@ -348,7 +349,7 @@ app.get('/getAllLeap', async (req, res) => {
     fetch(url, options).then(
         res => res.json()
     ).then(json => {
-        console.log(json)
+        // console.log(json)
         res.status(200).send({
             data: json,
         })
@@ -445,7 +446,7 @@ app.post('/createLeap', async(req, res) => {
             fetch(url, options)
             .then(res => res.json())
             .then(json => {
-                console.log(json)
+                // console.log(json)
                 res.status(200).send({
                     data: json,
                 })
@@ -509,7 +510,7 @@ function getApiKey (id, key) {
             })
         };
         axios(config).then(function (response) {
-            console.log('!!success',response.data)
+            // console.log('!!success',response.data)
             const datas = response.data.data.api_key[0];
             resolve(datas['id']);
         }).catch(function (error) {
