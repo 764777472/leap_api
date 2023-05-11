@@ -530,11 +530,19 @@ function keepalive() {
     axios({
         url: render_app_url,
         method: 'get'
+    }).then(res=>{
+
+    }).catch(err=>{
+
     })
     // 1.请求去水印服务
     axios({
         url: render_app_url1,
         method: 'get'
+    }).then(res=>{
+
+    }).catch(err=>{
+        
     })
   
     //2. 本地进程检测,保活
