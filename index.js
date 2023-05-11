@@ -40,6 +40,29 @@ app.get('/', async (req, res) => {
     })
 })
 
+// 获取功能列表
+app.get('/funList', async (req, res) => {
+    const urls = `https://leap.ydhhb.top/files/`;
+    // 此处填入功能列表
+    let arr = [
+        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', srcs: urls, sta: 1},
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', srcs: urls, sta: 0},
+		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', srcs: urls, sta: 1},
+    ];
+    // 筛选状态为开的功能返回
+    let datas = [];
+    arr.forEach(val=>{
+        if(val.sta) datas.push(val);
+    })
+    res.status(200).send({
+        cloud: false,
+        data: datas,
+        code: 200
+    })
+})
+
+
+
 // 获取采样器列表和模型列表
 app.get('/getSampler', async (req, res) => {
     let samplerList = [
@@ -100,27 +123,6 @@ app.get('/promptExample', async (req, res) => {
         if(val.sta) datas.push(val);
     })
     res.status(200).send({
-        data: datas,
-        code: 200
-    })
-})
-
-// 获取功能列表
-app.get('/funList', async (req, res) => {
-    const urls = `https://leap.ydhhb.top/files/`;
-    // 此处填入功能列表
-    let arr = [
-        {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', srcs: urls, sta: 1},
-		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', srcs: urls, sta: 1},
-		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', srcs: urls, sta: 1},
-    ];
-    // 筛选状态为开的功能返回
-    let datas = [];
-    arr.forEach(val=>{
-        if(val.sta) datas.push(val);
-    })
-    res.status(200).send({
-        cloud: false,
         data: datas,
         code: 200
     })
