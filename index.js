@@ -108,6 +108,7 @@ app.get('/', async (req, res) => {
 app.get('/getAdsta', async (req, res) => {
     const sta = await getFs('adsta.txt');
     res.status(200).send({
+        code: 200,
         sta: sta
     })
 })
@@ -116,6 +117,7 @@ app.get('/editAdsta', async (req, res) => {
     const content = req.query.sta*1;
     const sta = await writeFs('adsta.txt', content, 'w');
     res.status(200).send({
+        code: 200,
         sta: sta
     })
 })
