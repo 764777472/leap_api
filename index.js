@@ -483,7 +483,7 @@ app.post('/createLeap', async(req, res) => {
             .then(res => res.json())
             .then(json => {
                 console.log('创建',tkey,json)
-                if(json.statusCode == 402) {
+                if(json.statusCode == 402 || json.statusCode == 401) {
                     let tnames = Math.random().toString(36).slice(-8);
                     createKey(tnames).then(tkeys=>{
                         console.log('额度不足，创建新项目',tnames,'|',tkeys);
