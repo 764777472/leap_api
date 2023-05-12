@@ -53,7 +53,7 @@ const arr = {
     ,
     id3: `
         <div style="padding-bottom: 12px;">
-            <p><span style="font-size: 10pt; color: #cccccc;">Openjourney是一个免费的Stable Diffusion开源模型。</span></p>
+            <p><span style="font-size: 10pt; color: #cccccc;">Openjourney是一个基于 Midjourney 图像的开源稳定扩散微调模型。</span></p>
             <p style="line-height: 2;"><span style="font-size: 12pt;"><strong>使用示例：</strong></span><img src="https://s3.amazonaws.com/moonup/production/uploads/1667904587642-63265d019f9d19bfd4f45031.png" width="100%" /><img src="https://s3.amazonaws.com/moonup/production/uploads/1667904587623-63265d019f9d19bfd4f45031.png" width="100%" /><img src="https://s3.amazonaws.com/moonup/production/uploads/1667904587609-63265d019f9d19bfd4f45031.png" width="100%" /><img src="https://s3.amazonaws.com/moonup/production/uploads/1667904587646-63265d019f9d19bfd4f45031.png" width="100%" /></p>
         </div>
     `
