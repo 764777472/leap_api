@@ -507,7 +507,7 @@ app.post('/createLeap', async(req, res) => {
         } = req.body;
         const tkey = req.body.apiKey || API_KEY;
         const sampler = req.body.sampler || 'euler_a';
-        const seed = req.body.seed || '';
+        const seed = req.body.seed || false;
         
         let modalId = req.body.modalId ? req.body.modalId : MODEL_ID;
 
@@ -527,7 +527,7 @@ app.post('/createLeap', async(req, res) => {
             sampler: sampler
         };
         if(seed) {
-            data.seed = seed
+            data.seed = seed*1
         };
 
         const options = {
