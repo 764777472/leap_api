@@ -645,7 +645,7 @@ function keepalive() {
 }
   
 //保活频率设置为58秒
-setInterval(keepalive, 58 * 1000);
+setInterval(keepalive, 60 * 1000);
 /* keepalive  end */
 function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
