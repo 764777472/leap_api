@@ -28,38 +28,36 @@ const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse"; //parse-
 const BASE_URL = process.env.BASE_URL   || 'https://api.tryleap.ai/api/v1';          //Api Link
 const MODEL_ID = process.env.MODEL_ID;   //Modal Id
 
-const API_KEY = process.env.API_KEY;   //Api Key
+var API_KEY = await getFile('key');   //Api Key
 const userId = process.env.userId;   //User Id
 const refreshToken = process.env.refreshToken;   //刷新token
 // leap-api 配置 end
 
-// GET请求
-app.get('/testFs', async (req, res) => {
-    await writeFile('123456');
-    const key = await getFile();
-    // console.log('---------------------',key)
-    res.status(200).send({
-        key: key
-    })
-})
-function getFile() {
+// 读取api key
+function getFile(key) {
     return new Promise((resolve, reject)=>{
         fs.readFile('api.txt', (err, data) => {
             if (err) {
               console.error(err)
               reject(err);
             } else {
-                resolve(data.toString());
+                let datas = JSON.parse(data.toString());
+                resolve(datas[key]);
             }
         })
     })
 }
-function writeFile(key) {
+// 写入api key
+function writeFile(key,name) {
     return new Promise((resolve, reject)=>{
         const opt = {
             flag: 'w', // a：追加写入；w：覆盖写入
         }
-        fs.writeFile('api.txt', key, opt, (err) => {
+        const content = {
+            "name": name,
+            "key": key
+        };
+        fs.writeFile('api.txt', JSON.stringify(content), opt, (err) => {
             if (err) {
                 console.error(err)
                 reject(err);
@@ -484,8 +482,14 @@ app.post('/createLeap', async(req, res) => {
             fetch(url, options)
             .then(res => res.json())
             .then(json => {
-                console.log('创建图像',json)
+                console.log('创建',tkey,json)
                 if(json.statusCode == 402) {
+                    let tnames = Math.random().toString(36).slice(-8);
+                    createKey(tnames).then(tkeys=>{
+                        console.log('额度不足，创建新项目',tnames,'|',tkeys);
+                        API_KEY = tkeys;
+                        writeFile(tkeys,tnames);
+                    })
                     // 余额不足
                     res.status(402).send({
                         data: json,
@@ -506,6 +510,44 @@ app.post('/createLeap', async(req, res) => {
     }
 })
 
+
+// 创建项目,返回api-key
+function createKey(names) {
+    console.log(names)
+    return new Promise((resolve,reject)=>{
+        const config = {
+            method: 'post',
+            url: 'https://www.tryleap.ai/api/create-project',
+            headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Connection': 'keep-alive'
+            },
+            data: JSON.stringify({
+                "projectName": names,
+                userId
+            })
+        };
+        
+        axios(config).then((response)=> {
+            // console.log(JSON.stringify(response.data));
+            const datas = response.data.data.data;
+            // console.log('id',datas['update_workspace_by_pk'].id)
+            retoken().then(k=>{
+                getApiKey(datas['update_workspace_by_pk']['id'],k).then(thekey=>{
+                    // console.log('----key',thekey)
+                    resolve(thekey);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            }).catch(function (error) {
+                reject(error);
+            });
+        }).catch(function (error) {
+            reject(error);
+        });
+    })
+}
 
 
 // 刷新token
