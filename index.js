@@ -3,7 +3,7 @@ import { config as _config } from 'dotenv';
 import cors from 'cors';
 import fetch from 'node-fetch';
 import axios from 'axios';
-
+import fs from 'fs';
 import Redis from 'ioredis';
 
 _config();
@@ -33,6 +33,42 @@ const userId = process.env.userId;   //User Id
 const refreshToken = process.env.refreshToken;   //刷新token
 // leap-api 配置 end
 
+// GET请求
+app.get('/testFs', async (req, res) => {
+    await writeFile('123456');
+    const key = await getFile();
+    // console.log('---------------------',key)
+    res.status(200).send({
+        key: key
+    })
+})
+function getFile() {
+    return new Promise((resolve, reject)=>{
+        fs.readFile('api.txt', (err, data) => {
+            if (err) {
+              console.error(err)
+              reject(err);
+            } else {
+                resolve(data.toString());
+            }
+        })
+    })
+}
+function writeFile(key) {
+    return new Promise((resolve, reject)=>{
+        const opt = {
+            flag: 'w', // a：追加写入；w：覆盖写入
+        }
+        fs.writeFile('api.txt', key, opt, (err) => {
+            if (err) {
+                console.error(err)
+                reject(err);
+            } else {
+                resolve('ok');
+            }
+        })
+    })
+}
 // GET请求
 app.get('/', async (req, res) => {
     res.status(200).send({
@@ -449,9 +485,16 @@ app.post('/createLeap', async(req, res) => {
             .then(res => res.json())
             .then(json => {
                 console.log('创建图像',json)
-                res.status(200).send({
-                    data: json,
-                })
+                if(json.statusCode == 402) {
+                    // 余额不足
+                    res.status(402).send({
+                        data: json,
+                    })
+                } else {
+                    res.status(200).send({
+                        data: json,
+                    })
+                }
             })
             .catch(err => {
                 console.error('error:' + err)
