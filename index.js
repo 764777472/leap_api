@@ -33,6 +33,37 @@ const userId = process.env.userId;   //User Id
 const refreshToken = process.env.refreshToken;   //刷新token
 // leap-api 配置 end
 
+// 读取文件
+function getFs(name) {
+    return new Promise((resolve, reject)=>{
+        fs.readFile(name, (err, data) => {
+            if (err) {
+              console.error(err)
+              reject(err);
+            } else {
+                let datas = JSON.parse(data.toString());
+                resolve(datas);
+            }
+        })
+    })
+}
+// 写入文件
+function writeFs(name, content, type) {
+    return new Promise((resolve, reject)=>{
+        const opt = {
+            flag: type || 'w', // a：追加写入；w：覆盖写入
+        }
+        fs.writeFile(name, JSON.stringify(content), opt, (err) => {
+            if (err) {
+                console.error(err)
+                reject(err);
+            } else {
+                resolve('ok');
+            }
+        })
+    })
+}
+
 // 读取api key
 function getFile(key) {
     return new Promise((resolve, reject)=>{
@@ -71,6 +102,21 @@ function writeFile(key,name) {
 app.get('/', async (req, res) => {
     res.status(200).send({
         message: 'Leap api for render.',
+    })
+})
+// 获取广告状态
+app.get('/getAdsta', async (req, res) => {
+    const sta = await getFs('adsta.txt');
+    res.status(200).send({
+        sta: sta
+    })
+})
+// 修改广告状态
+app.get('/editAdsta', async (req, res) => {
+    const content = req.query.sta*1;
+    const sta = await writeFs('adsta.txt', content, 'w');
+    res.status(200).send({
+        sta: sta
     })
 })
 
