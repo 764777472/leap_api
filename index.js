@@ -137,12 +137,13 @@ app.get('/editSta_HHB', async (req, res) => {
 // 获取功能列表
 app.get('/funList', async (req, res) => {
     const urls = `https://leap.ydhhb.top/files/`;
-    const aista = await getFs('ai.txt');
+    const leap = await getFs('ai.txt');
+    const drawIt = 1;
     // console.log('画图',aista)
     // 此处填入功能列表
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', srcs: urls, sta: 1},
-		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'AI.svg', srcs: urls, sta: aista*1},
+		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'logo1.png', srcs: urls, sta: leap*1},
 		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', srcs: urls, sta: 1},
     ];
     // console.log(arr)
@@ -708,7 +709,7 @@ function keepalive() {
 }
   
 //保活频率设置为58秒
-setInterval(keepalive, 59 * 1000);
+// setInterval(keepalive, 59 * 1000);
 /* keepalive  end */
 function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
