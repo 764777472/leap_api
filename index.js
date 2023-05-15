@@ -174,10 +174,10 @@ app.get('/getSampler', async (req, res) => {
         {id: 1, name: "Stable Diffusion 1.5", modal: "8b1b897c-d66d-45a6-b8d7-8e32421d02cf", desc: 'id1'},
         {id: 2, name: "Stable Diffusion 2.1", modal: "ee88d150-4259-4b77-9d0f-090abe29f650", desc: 'id1'},
         {id: 3, name: "OpenJourney v4",       modal: "1e7737d7-545e-469f-857f-e4b46eaa151d", desc: 'id3'},
-        {id: 4, name: "OpenJourney v2",       modal: "d66b1686-5e5d-43b2-a2e7-d295d679917c", desc: 'id3'},
-        {id: 5, name: "OpenJourney v1",       modal: "7575ea52-3d4f-400f-9ded-09f7b1b1a5b8", desc: 'id3'},
-        {id: 6, name: "Modern Disney",        modal: "8ead1e66-5722-4ff6-a13f-b5212f575321", desc: 'id6'},
-        {id: 7, name: "Future Diffusion",     modal: "1285ded4-b11b-4993-a491-d87cdfe6310c", desc: 'id7'},
+        {id: 4, name: "OpenJourney v2",       modal: "d66b1686-5e5d-43b2-a2e7-d295d679917c", desc: 'id4'},
+        {id: 5, name: "OpenJourney v1",       modal: "7575ea52-3d4f-400f-9ded-09f7b1b1a5b8", desc: 'id4'},
+        {id: 6, name: "Stable Diffusion(现代迪士尼风格)",        modal: "8ead1e66-5722-4ff6-a13f-b5212f575321", desc: 'id6'},
+        {id: 7, name: "Stable Diffusion(未来科幻主题)",     modal: "1285ded4-b11b-4993-a491-d87cdfe6310c", desc: 'id7'},
         {id: 8, name: "Realistic Vision v2.0",modal: "eab32df0-de26-4b83-a908-a83f3015e971", desc: 'id8'},
     ]
     res.status(200).send({
