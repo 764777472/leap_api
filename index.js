@@ -73,7 +73,12 @@ function getFile(key) {
               reject(err);
             } else {
                 let datas = JSON.parse(data.toString());
-                resolve(datas[key]);
+                if(key) {
+                    resolve(datas[key]);
+                } else {
+                    resolve(datas);
+                }
+                
             }
         })
     })
@@ -98,10 +103,28 @@ function writeFile(key,name) {
         })
     })
 }
+
 // GET请求
 app.get('/', async (req, res) => {
     res.status(200).send({
         message: 'Leap api for render.',
+    })
+})
+// 获取key
+app.get('/currkey', async (req, res) => {
+    const data = await getFile()
+    res.status(200).send({
+        code: 200,
+        data: data
+    })
+})
+// 写key
+app.get('/wcurrkey', async (req, res) => {
+    const {key,name} = req.query;
+    const data = await writeFile(key,name);
+    res.status(200).send({
+        code: 200,
+        data: data
     })
 })
 // 获取广告状态
