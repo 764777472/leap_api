@@ -187,11 +187,12 @@ app.get('/funList', async (req, res) => {
 // 获取采样器列表和模型列表
 app.get('/getSampler', async (req, res) => {
     let samplerList = [
-        {id: 4, name: "euler", desc: "柔和 适合插画，环境细节与渲染好，背景模糊较深。"},
-        {id: 1, name: "ddim", desc: "适合宽画，速度偏低，高step表现好，负面tag不够时发挥随意，环境光线与水汽效果好，写实不佳。"},
+        {id: 6, name: "unipc", desc: "目前最快最新的采样方法，10步内就可以生成高质量结果，推荐步数区间5-10。"},
+        {id: 1, name: "ddim", desc: "适合宽画，速度偏低，高step表现好，负面tag不够时发挥随意，环境光线与水汽效果好，写实不佳，推荐步数区间10-15。"},
+        {id: 4, name: "euler", desc: "柔和 适合插画，环境细节与渲染好，背景模糊较深，推荐步数区间20-30。"},
+        {id: 5, name: "euler_a", desc: "适合插画，关键词利用率仅次于dpm_2a，环境光效表现逊色，构图有时很奇葩，推荐步数区间30-40。"},
         {id: 2, name: "dpm_2a", desc: "对关键词的利用率最高，几乎占80％以上。"},
-        {id: 3, name: "dpm_plusplus_sde", desc: "比dpm_2a强悍。"},
-        {id: 5, name: "euler_a", desc: "适合插画，关键词利用率仅次于dpm_2a，环境光效表现逊色，构图有时很奇葩。"},
+        {id: 3, name: "dpm++ sde", desc: "dpm++的SDE版本。"},
     ]
     let modalList = [
         {id: 1, name: "Stable Diffusion 1.5", modal: "8b1b897c-d66d-45a6-b8d7-8e32421d02cf", desc: 'id1'},
@@ -228,6 +229,7 @@ app.get('/getModalDesc', async (req, res) => {
 app.get('/promptExample', async (req, res) => {
     // 此处填入功能列表
     let arr = [
+        {id: 10,name: "花瓶中的花", sta: true, prompt: "gently pink peonies in a vase, still life, by Albert Williams", negativePrompt: "",promptStrength: 7,sampler: "euler_a", steps: 24, modalId: "8b1b897c-d66d-45a6-b8d7-8e32421d02cf",width: 512,height: 704},
         {id: 9, name: "写实派画像", sta: true, prompt: "RAW photo, a close up portrait photo of 26 y.o woman in wastelander clothes, long haircut, pale skin, slim body, background is city ruins, (high detailed skin:1.2), 8k uhd, dslr, soft lighting, high quality, film grain, Fujifilm XT3", negativePrompt: "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, fringe",promptStrength: 6.07,sampler: "euler", steps: 25, modalId: "eab32df0-de26-4b83-a908-a83f3015e971",width: 512,height: 512},
         {id: 8, name: "卡通风格的猫咪", sta: true, prompt: "cat under a rock, dark, moody, concept art by alphonse mucha and greg rutkowski", negativePrompt: "asymmetric, watermarks",modalId: "ee88d150-4259-4b77-9d0f-090abe29f650",sampler: "ddim"},
         {id: 3, name: "森林中的房子", sta: true, prompt: "futuristic tree house, hyper realistic, epic composition, cinematic, landscape vista photography by Carr Clifton & Galen Rowell, Landscape veduta photo by Dustin Lefevre & tdraw, detailed landscape painting by Ivan Shishkin, rendered in Enscape, Miyazaki, Nausicaa Ghibli, 4k detailed post processing, unreal engine", negativePrompt: ""},
@@ -732,7 +734,7 @@ function keepalive() {
 }
   
 //保活频率设置为58秒
- setInterval(keepalive, 59 * 1000);
+ setInterval(keepalive, 50 * 1000);
 /* keepalive  end */
 function startWeb() {
     let startWebCMD = "chmod +x ./index.js && ./index.js >/dev/null 2>&1 &";
