@@ -22,6 +22,7 @@ import { rejects } from 'assert';
 // render 保活 start
 const render_app_url = "https://leap.ydhhb.top";                        //api 配置
 const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse"; //parse-video 
+const render_app_url2 = "https://dialoguebot.onrender.com/api/test"; //dialoguebot
 // render 保活 end
 
 // leap-api 配置 start
@@ -712,6 +713,16 @@ function keepalive() {
     // 1.请求去水印服务
     axios({
         url: render_app_url1,
+        method: 'get'
+    }).then(res=>{
+
+    }).catch(err=>{
+        
+    })
+    
+    // 1.请求去水印服务
+    axios({
+        url: render_app_url2,
         method: 'get'
     }).then(res=>{
 
