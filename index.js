@@ -168,7 +168,9 @@ app.get('/funList', async (req, res) => {
     let arr = [
         {id: 1, name: "去水印", url: "/pages/watermark/watermark",icon: 'watermark.svg', srcs: urls, sta: 1},
 		{id: 2, name: "AI画图", url: "/pages/leap/leap",icon: 'logo1.png', srcs: urls, sta: leap*1},
+		// {id: 3, name: "图生图", url: "/pages/drawIt/drawIt",icon: 'logo1.png', srcs: urls, sta: drawIt*1},
 		{id: 4, name: "画板", url: "/pages/canvastool/canvastool",icon: 'draw.svg', srcs: urls, sta: 1},
+		{id: 5, name: "运动打卡", url: "/pages/wchatRun/wchatRun",icon: 'run.svg', srcs: urls, sta: 1},
     ];
     // console.log(arr)
     // 筛选状态为开的功能返回
