@@ -179,7 +179,7 @@ app.get('/funList', async (req, res) => {
         if(val.sta) datas.push(val);
     })
     res.status(200).send({
-        cloud: false,
+        cloud: true,
         data: datas,
         code: 200
     })
