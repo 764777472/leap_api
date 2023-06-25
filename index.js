@@ -622,12 +622,12 @@ function createKey(names) {
         };
         
         axios(config).then((response)=> {
-            // console.log(JSON.stringify(response.data));
+            console.log('create-project',JSON.stringify(response.data));
             const datas = response.data.data.data;
             // console.log('id',datas['update_workspace_by_pk'].id)
             retoken().then(k=>{
                 getApiKey(datas['update_workspace_by_pk']['id'],k).then(thekey=>{
-                    // console.log('----key',thekey)
+                    console.log('----key',thekey)
                     resolve(thekey);
                 }).catch(function (error) {
                     reject(error);
@@ -658,7 +658,7 @@ function retoken() {
             })
         };
         axios(config).then(function (response) {
-            // console.log('!!success',response.data)
+            console.log('!!retoken success',response.data)
             const datas = response.data.accessToken;
             resolve(datas);
         }).catch(function (error) {
