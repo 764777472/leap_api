@@ -544,7 +544,7 @@ app.post('/createLeap', async(req, res) => {
 
         let data = {
             prompt,
-            negativePrompt: negativePrompt ? negativePrompt : 'asymmetric, watermarks',
+            negativePrompt: negativePrompt ? negativePrompt : '',
             steps,
             width,
             height,
