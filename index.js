@@ -27,9 +27,9 @@ const render_app_url2 = "https://dialoguebot.onrender.com/api/test"; //dialogueb
 
 // leap-api 配置 start
 const BASE_URL = process.env.BASE_URL   || 'https://api.tryleap.ai/api/v1';          //Api Link
-const MODEL_ID = process.env.MODEL_ID;   //Modal Id
+const MODEL_ID = "8b1b897c-d66d-45a6-b8d7-8e32421d02cf";   //Modal Id
 
-var API_KEY = await getFile('key');   //Api Key
+var API_KEY = process.env.API_KEY || await getFile('key');   //Api Key
 const userId = process.env.userId;   //User Id
 const refreshToken = process.env.refreshToken;   //刷新token
 // leap-api 配置 end
@@ -123,6 +123,7 @@ app.get('/currkey', async (req, res) => {
 app.get('/wcurrkey', async (req, res) => {
     const {key,name} = req.query;
     const data = await writeFile(key,name);
+    API_KEY = key;
     res.status(200).send({
         code: 200,
         data: data
