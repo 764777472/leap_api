@@ -22,7 +22,7 @@ import { rejects } from 'assert';
 // render 保活 start
 const render_app_url = "https://leap.ydhhb.top";                        //api 配置
 const render_app_url1 = "https://mark.ydhhb.top/video/share/url/parse"; //parse-video 
-const render_app_url2 = "https://dialoguebot.onrender.com/api/test"; //dialoguebot
+const render_app_url2 = "https://dialoguebot.onrender.com/api/test"; 	//dialoguebot
 // render 保活 end
 
 // leap-api 配置 start
@@ -739,7 +739,7 @@ function keepalive() {
       if (err) {
         console.log("保活本地进程检测-命令行执行失败:" + err);
       } else {
-        console.log("保活本地进程检测正在运行 stdout", stdout);
+        // console.log("保活本地进程检测正在运行 stdout", stdout);
         if (stdout.includes("node index.js"))
             console.log("保活index.js-本地进程检测-index.js正在运行");
         //命令调起web.js
