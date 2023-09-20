@@ -1,4 +1,5 @@
 const arr = {
+	id9: `SDXL 目前最强大的模型`,
     id8: `
         <div style="padding-bottom: 12px;">
             <p style="line-height: 2;"><span style="font-size: 12pt;"><strong>使用示例：</strong></span></p>

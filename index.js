@@ -206,7 +206,9 @@ app.get('/getSampler', async (req, res) => {
         {id: 5, name: "OpenJourney v1",       modal: "7575ea52-3d4f-400f-9ded-09f7b1b1a5b8", desc: 'id4'},
         {id: 6, name: "Stable Diffusion(现代迪士尼风格)",        modal: "8ead1e66-5722-4ff6-a13f-b5212f575321", desc: 'id6'},
         {id: 7, name: "Stable Diffusion(未来科幻主题)",     modal: "1285ded4-b11b-4993-a491-d87cdfe6310c", desc: 'id7'},
-        {id: 8, name: "Realistic Vision v2.0",modal: "eab32df0-de26-4b83-a908-a83f3015e971", desc: 'id8'},
+        {id: 8, name: "Realistic Vision v4.0",modal: "37d42ae9-5f5f-4399-b60b-014d35e762a5	", desc: 'id8'},
+        {id: 9, name: "Realistic Vision v2.0",modal: "eab32df0-de26-4b83-a908-a83f3015e971", desc: 'id8'},
+        {id: 10, name: "SDXL",modal: "26a1a203-3a46-42cb-8cfa-f4de075907d8", desc: 'id9'},
     ]
     res.status(200).send({
         data: {
@@ -407,13 +409,14 @@ app.get('/getPkey', async (req, res) => {
 // 删除图像
 app.get('/deleteLeap', async (req, res) => {
     const id = req.query.id || '';
+	const tkey = req.query.key || API_KEY;
     const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences/${id}`;
 
     axios({
         url,
         method: 'delete',
         headers: {
-            authorization: 'Bearer ' + API_KEY
+            authorization: 'Bearer ' + tkey
         }
     }).then(response => {
         // console.log(response)
@@ -437,12 +440,13 @@ app.get('/deleteLeap', async (req, res) => {
 // 获取单个图像
 app.get('/getLeap', async (req, res) => {
     const id = req.query.id || '';
+	const tkey = req.query.key || API_KEY;
     const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences/${id}`;
     const options = {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          authorization: 'Bearer ' + API_KEY
+          authorization: 'Bearer ' + tkey
         }
     };
     if(!id) {
@@ -452,6 +456,7 @@ app.get('/getLeap', async (req, res) => {
         .then(res => res.json())
         .then(json => {
             // console.log(json)
+			json['key'] = tkey;
             res.status(200).send({
                 data: json,
             })
@@ -468,12 +473,13 @@ app.get('/getLeap', async (req, res) => {
 // 获取全部图像
 app.get('/getAllLeap', async (req, res) => {
     const { page=1, pageSize=100 } = req.query;
+	const tkey = req.query.key || API_KEY;
     const url = `${BASE_URL}/images/models/${MODEL_ID}/inferences?page=${page}&pageSize=${pageSize}`;
     const options = {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          authorization: 'Bearer ' + API_KEY
+          authorization: 'Bearer ' + tkey
         }
     };
     fetch(url, options).then(
@@ -589,6 +595,7 @@ app.post('/createLeap', async(req, res) => {
                         data: json,
                     })
                 } else {
+					json['key'] = tkey;
                     res.status(200).send({
                         data: json,
                     })
